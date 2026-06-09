@@ -145,7 +145,7 @@ export default function Mission4Screen({ state, completeMission }) {
 
         <MissionCard eyebrow="Missione 04" title="Gratta e vinci">
           <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.6 }}>
-            Tocca le tessere per scoprirle. Trova 3 immagini uguali per vincere il tuo premio.
+            Tocca le tessere per scoprirle. Trova 3 immagini uguali per scoprire la tua prossima destinazione.
           </p>
 
           {/* Contatore Lerici */}
