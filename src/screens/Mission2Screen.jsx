@@ -12,8 +12,8 @@ const VILLAGES = [
 ]
 
 const CLUES = [
-  'La nostra prossima tappa non ci siamo mai stati insieme.',
-  'La nostra prossima tappa non è famosa per le sue tante barche.',
+  'Non siamo mai stati insieme nella nostra prossima tappa.',
+  'La nostra prossima tappa non ha un porticciolo così affollato.',
 ]
 
 export default function Mission2Screen({ state, completeMission }) {

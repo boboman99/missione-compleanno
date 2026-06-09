@@ -84,8 +84,8 @@ export default function Mission5Screen({ state, completeMission }) {
                 animate={{ opacity: 1, scale: 1 }}
               >
                 <span className="sb-icon">📸</span>
-                <div className="sb-title">Perfetto. È tua.</div>
-                <div className="sb-sub">Conserverai questo ricordo per sempre</div>
+                <div className="sb-title">Perfetto.</div>
+                <div className="sb-sub">Conservala, è tua per sempre</div>
               </motion.div>
             ) : preview ? (
               <motion.div
