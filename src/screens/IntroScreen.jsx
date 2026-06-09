@@ -32,18 +32,18 @@ export default function IntroScreen({ advance }) {
       >
         <svg className="env-svg" viewBox="0 0 110 84" fill="none" xmlns="http://www.w3.org/2000/svg">
           {/* Envelope body */}
-          <rect x="2" y="22" width="106" height="60" rx="5" fill="#1a2a4a" stroke="rgba(212,168,83,0.4)" strokeWidth="1.5" />
+          <rect x="2" y="22" width="106" height="60" rx="5" fill="#2a1535" stroke="rgba(201,169,110,0.35)" strokeWidth="1.5" />
           {/* Bottom fold lines */}
-          <line x1="2" y1="82" x2="55" y2="50" stroke="rgba(212,168,83,0.2)" strokeWidth="1" />
-          <line x1="108" y1="82" x2="55" y2="50" stroke="rgba(212,168,83,0.2)" strokeWidth="1" />
+          <line x1="2" y1="82" x2="55" y2="50" stroke="rgba(201,169,110,0.18)" strokeWidth="1" />
+          <line x1="108" y1="82" x2="55" y2="50" stroke="rgba(201,169,110,0.18)" strokeWidth="1" />
           {/* Heart / seal */}
           <text x="55" y="65" textAnchor="middle" fontSize="22">💌</text>
           {/* Flap (top triangle that opens) */}
           <polygon
             className={`env-flap${flapOpen ? ' open' : ''}`}
             points="2,22 55,55 108,22"
-            fill="#243356"
-            stroke="rgba(212,168,83,0.4)"
+            fill="#3a1a48"
+            stroke="rgba(201,169,110,0.35)"
             strokeWidth="1.5"
             strokeLinejoin="round"
           />

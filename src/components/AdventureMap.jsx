@@ -45,12 +45,12 @@ export default function AdventureMap({ completedMissions = [], scooterOverride =
       >
         <defs>
           <linearGradient id="map-bg-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0d1f3a" />
-            <stop offset="100%" stopColor="#0a1828" />
+            <stop offset="0%" stopColor="#1a0a28" />
+            <stop offset="100%" stopColor="#110820" />
           </linearGradient>
           <linearGradient id="sea-g" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#0c3050" stopOpacity="0.5" />
-            <stop offset="100%" stopColor="#051825" stopOpacity="0.3" />
+            <stop offset="0%" stopColor="#2a1040" stopOpacity="0.55" />
+            <stop offset="100%" stopColor="#0d0618" stopOpacity="0.35" />
           </linearGradient>
           <filter id="glow">
             <feGaussianBlur stdDeviation="2.5" result="blur" />
@@ -71,17 +71,17 @@ export default function AdventureMap({ completedMissions = [], scooterOverride =
         <path
           d="M 140,0 C 155,60 160,110 140,165 C 130,195 125,235 132,285 C 138,328 145,360 155,390"
           fill="none"
-          stroke="rgba(100,180,220,0.18)"
+          stroke="rgba(180,100,160,0.2)"
           strokeWidth="1.5"
         />
 
         {/* Small wave marks in sea */}
         {[{ x: 200, y: 90 }, { x: 230, y: 160 }, { x: 215, y: 240 }, { x: 240, y: 300 }].map((w, i) => (
-          <g key={i} opacity="0.25">
+          <g key={i} opacity="0.22">
             <path d={`M ${w.x},${w.y} Q ${w.x + 7},${w.y - 4} ${w.x + 14},${w.y}`}
-              fill="none" stroke="#80C8E8" strokeWidth="1.2" strokeLinecap="round" />
+              fill="none" stroke="#c090d0" strokeWidth="1.2" strokeLinecap="round" />
             <path d={`M ${w.x + 2},${w.y + 5} Q ${w.x + 9},${w.y + 1} ${w.x + 16},${w.y + 5}`}
-              fill="none" stroke="#80C8E8" strokeWidth="1" strokeLinecap="round" />
+              fill="none" stroke="#c090d0" strokeWidth="1" strokeLinecap="round" />
           </g>
         ))}
 
@@ -89,7 +89,7 @@ export default function AdventureMap({ completedMissions = [], scooterOverride =
         <path
           d={PATH_D}
           fill="none"
-          stroke="rgba(148,163,184,0.18)"
+          stroke="rgba(180,120,160,0.15)"
           strokeWidth="2"
           strokeDasharray="5 5"
           strokeLinecap="round"
@@ -125,8 +125,8 @@ export default function AdventureMap({ completedMissions = [], scooterOverride =
               <circle
                 cx={wp.x} cy={wp.y}
                 r={reached ? 7 : 5}
-                fill={reached ? '#D4A853' : 'none'}
-                stroke={reached ? '#E8C67A' : 'rgba(148,163,184,0.4)'}
+                fill={reached ? '#c9a96e' : 'none'}
+                stroke={reached ? '#e0c88c' : 'rgba(180,120,160,0.35)'}
                 strokeWidth="1.5"
               />
               {reached && (
@@ -165,14 +165,14 @@ export default function AdventureMap({ completedMissions = [], scooterOverride =
         </text>
 
         {/* Compass rose — top right */}
-        <g transform="translate(248, 28)" opacity="0.5">
-          <circle cx="0" cy="0" r="14" fill="none" stroke="rgba(212,168,83,0.3)" strokeWidth="1" />
-          <text x="0" y="-17" textAnchor="middle" fontSize="7" fill="#D4A853" fontWeight="bold">N</text>
-          <line x1="0" y1="-11" x2="0" y2="-4" stroke="#D4A853" strokeWidth="1" />
-          <line x1="0" y1="4" x2="0" y2="11" stroke="rgba(212,168,83,0.4)" strokeWidth="1" />
-          <line x1="-11" y1="0" x2="-4" y2="0" stroke="rgba(212,168,83,0.4)" strokeWidth="1" />
-          <line x1="4" y1="0" x2="11" y2="0" stroke="rgba(212,168,83,0.4)" strokeWidth="1" />
-          <circle cx="0" cy="0" r="2" fill="#D4A853" />
+        <g transform="translate(248, 28)" opacity="0.45">
+          <circle cx="0" cy="0" r="14" fill="none" stroke="rgba(201,169,110,0.3)" strokeWidth="1" />
+          <text x="0" y="-17" textAnchor="middle" fontSize="7" fill="#c9a96e" fontWeight="bold">N</text>
+          <line x1="0" y1="-11" x2="0" y2="-4" stroke="#c9a96e" strokeWidth="1" />
+          <line x1="0" y1="4" x2="0" y2="11" stroke="rgba(212,132,122,0.4)" strokeWidth="1" />
+          <line x1="-11" y1="0" x2="-4" y2="0" stroke="rgba(212,132,122,0.4)" strokeWidth="1" />
+          <line x1="4" y1="0" x2="11" y2="0" stroke="rgba(212,132,122,0.4)" strokeWidth="1" />
+          <circle cx="0" cy="0" r="2" fill="#c9a96e" />
         </g>
 
         {/* Decorative border */}
