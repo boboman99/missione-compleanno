@@ -713,6 +713,86 @@ body {
   50% { transform: translateY(-7px); }
 }
 
+/* ===== SCRATCH CARD (Mission 4) ===== */
+.sc-counter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
+  padding: 4px 0 2px;
+}
+
+.sc-star {
+  font-size: 20px;
+  color: rgba(212, 168, 83, 0.2);
+  transition: color 0.3s, transform 0.3s;
+}
+
+.sc-star.found {
+  color: var(--gold);
+  transform: scale(1.2);
+}
+
+.sc-counter-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-left: 4px;
+  font-weight: 600;
+}
+
+.sc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.sc-cell {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  position: relative;
+  perspective: 400px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.sc-front,
+.sc-back {
+  position: absolute;
+  inset: 0;
+  border-radius: 10px;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transition: transform 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.sc-front {
+  background: linear-gradient(135deg, #D4A853, #B8903A);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotateY(0deg);
+}
+
+.sc-front-icon {
+  font-size: 26px;
+  font-weight: 700;
+  color: rgba(10, 20, 40, 0.45);
+  font-family: var(--font-h);
+}
+
+.sc-back {
+  transform: rotateY(180deg);
+  border: 1px solid rgba(212, 168, 83, 0.15);
+}
+
+.sc-cell.revealed .sc-front { transform: rotateY(-180deg); }
+.sc-cell.revealed .sc-back  { transform: rotateY(0deg); }
+
+.sc-cell.winning {
+  box-shadow: 0 0 0 2px var(--gold), 0 0 14px rgba(212, 168, 83, 0.5);
+}
+
 /* ===== TRAVEL / ARRIVAL SCREEN ===== */
 .travel-screen {
   min-height: 100dvh;
