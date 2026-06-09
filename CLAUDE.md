@@ -10,49 +10,77 @@ $env:PATH = "C:\Program Files\nodejs;" + $env:PATH
 ```
 
 ```bash
-npm run dev          # dev server at http://localhost:5173/missione-compleanno/
-npm run dev -- --host  # also expose on LAN (for phone testing)
-npm run build        # production build → dist/
-npm run deploy       # build + push to gh-pages branch (GitHub Pages)
+npm run dev              # dev server at http://localhost:5173/missione-compleanno/
+npm run dev -- --host    # also expose on LAN (for iPhone testing)
+npm run build            # production build → dist/
+npm run deploy           # build + push to gh-pages branch, then git push origin main
 ```
 
-Dev reset: open the app URL with `#reset` appended to clear localStorage and restart from the intro.
+After `npm run deploy`, always also run `git push origin main` to keep the main branch in sync (deploy only pushes to `gh-pages`).
+
+Dev reset: append `#reset` to the URL to clear localStorage and restart from intro.
 
 ## Architecture
 
-The app is a **linear state machine** — a single `phase` string in localStorage drives everything. There is no router; `App.jsx` renders the correct screen via a lookup map keyed on `phase`.
+Linear state machine — a single `phase` string in localStorage drives all routing. No router library; `App.jsx` renders the correct screen via a lookup map.
 
 **State shape** (localStorage key: `missione-compleanno`):
 ```js
 { phase, completedMissions: [], dayCompletedAt: null, photo: null }
 ```
 
-**Phase flow:**
+**Full phase flow:**
 ```
-intro → mission1 → mission2 → mission3 → mission4 → day-complete → finale
+intro → mission1 → mission2
+→ travel-tellaro → arrive-tellaro
+→ mission3
+→ travel-fiascherino → arrive-fiascherino
+→ mission4
+→ travel-lerici → arrive-lerici
+→ mission5 → day-complete → finale
 ```
 
-`useAdventureState` (`src/hooks/useAdventureState.js`) is the single source of truth. Every `setState` call immediately writes to localStorage — no effect needed. Two transition helpers:
-- `advance(nextPhase, extras?)` — change phase without completing a mission
-- `completeMission(n, nextPhase, extras?)` — append mission number and change phase atomically
+`useAdventureState` (`src/hooks/useAdventureState.js`) is the single source of truth. Exports:
+- `advance(nextPhase, extras?)` — change phase
+- `completeMission(n, nextPhase, extras?)` — add mission number to `completedMissions` and change phase atomically
+- `reset()` — clear localStorage and return to intro
 
-## Key Implementation Details
+## Travel / Arrival screens
 
-**Screens** (`src/screens/`) each accept `{ state, advance, completeMission }`. Mission screens show a success burst for ~1.8s then call `completeMission()` — this delay lets the `AdventureMap` scooter animate to the new waypoint before the screen transitions.
+`TravelScreen.jsx` is a single reusable component for all 6 travel/arrive phases. Configuration lives entirely in `App.jsx` in the `TRAVEL_CONFIGS` object — to change copy, button text, or destinations, edit that object only.
 
-**AdventureMap** (`src/components/AdventureMap.jsx`) is a pure SVG. The scooter position is derived from `completedMissions.length` (index into `WAYPOINTS` array). CSS `transition` on `x`/`y` handles the animation. Gold path segments are rendered only for completed legs; grey dashes for future ones.
+`AdventureMap` accepts an optional `scooterOverride: {x, y}` prop. Travel screens pass a halfway coordinate (defined in `TravelScreen.jsx`'s `HALFWAY` map); arrival screens omit it so the scooter lands on the waypoint derived from `completedMissions.length`.
 
-**Mission 2 villages** are inline SVG illustrations (no external files). To replace with real photos, swap `<v.Component />` in `Mission2Screen.jsx` for `<img src={imgPath('village1.jpg')} />` where `imgPath = name => \`${import.meta.env.BASE_URL}images/${name}\``.
+## Missions
 
-**Mission 4 photo** is compressed via Canvas API before saving (max 800px, JPEG 0.72) to stay within the 5 MB localStorage limit.
+| Phase | What | Transition |
+|-------|------|------------|
+| `mission1` | Text riddle — answer: `"aurea"` | `completeMission(1, 'mission2')` |
+| `mission2` | Pick correct village photo (Tellaro) | `completeMission(2, 'travel-tellaro')` |
+| `mission3` | Text riddle — answers: pranzo/cibo/fame/etc | `completeMission(3, 'travel-fiascherino')` |
+| `mission4` | Scratch card 3×3 — 5 Lerici + 2 Vernazza + 2 Portovenere (inline SVG) | `completeMission(4, 'travel-lerici')` |
+| `mission5` | Take photo, canvas-compress (max 800px JPEG 0.72), save to state | `completeMission(5, 'day-complete', {photo})` |
 
-## Before Deploy
+Progress bar shows 5 ticks (20% each). `SHOW_PROGRESS` in `App.jsx` lists every phase where the bar is visible.
 
-Two constants must be filled in:
+## Key implementation notes
 
-| File | What to change |
-|------|---------------|
-| `src/screens/FinaleScreen.jsx` | `VENUE.name` and `VENUE.detail` — dinner restaurant |
-| `package.json` + `vite.config.js` | `[GITHUB_USERNAME]` → actual GitHub username |
+**Mission 2 villages**: `public/images/Monterosso.jpg`, `Camogli.jpg`, `Tellaro.jpg`. Correct answer is index 2 (Tellaro). Image paths use `import.meta.env.BASE_URL` for Vite base-path compatibility.
 
-The `base` in `vite.config.js` must match the GitHub repo name exactly (`/missione-compleanno/`).
+**Mission 4 scratch card**: star counter shows the highest count of any single borough revealed (not just Lerici) so the outcome isn't telegraphed. Win condition is still 3 Lerici.
+
+**Photo compression** (`mission5`): Canvas resize + `toDataURL('image/jpeg', 0.72)`. Wrapped in try/catch for localStorage quota errors.
+
+**MenuButton**: `position: fixed` top-right, `z-index: 200`, present on all screens. Opens a confirmation dropdown before calling `reset()`.
+
+## Design system
+
+Fonts: **Cormorant Garamond** (headings, italic) + **Raleway** (body). Loaded in `index.html`.
+
+Key CSS variables: `--bg: #0d0614`, `--gold: #c9a96e`, `--rose: #d4847a`, `--text: #f5ede8`, `--text-muted: #9a7d8a`. Full palette in `src/index.css`.
+
+AdventureMap SVG colors are hardcoded in the component, not CSS variables — edit them directly in `AdventureMap.jsx` if the palette changes.
+
+## Deployed
+
+Live at `https://boboman99.github.io/missione-compleanno/`. GitHub username: `boboman99`.
