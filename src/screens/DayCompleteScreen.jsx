@@ -41,7 +41,7 @@ export default function DayCompleteScreen({ state, advance }) {
 
       {/* Map — tutte le missioni completate */}
       <div style={{ width: '100%', maxWidth: 300 }}>
-        <AdventureMap completedMissions={[1, 2, 3, 4]} />
+        <AdventureMap completedMissions={[1, 2, 3, 4, 5]} />
       </div>
 
       <motion.div
@@ -50,7 +50,7 @@ export default function DayCompleteScreen({ state, advance }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
       >
-        ✓ Tutte le missioni completate
+        ✓ Hai vinto — 5/5 missioni
       </motion.div>
 
       <motion.h2
@@ -68,9 +68,9 @@ export default function DayCompleteScreen({ state, advance }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.6 }}
       >
-        Per oggi l'avventura si ferma qui.{'\n'}
-        Torna alla base. Riposati. Preparati.{'\n'}
-        Il gran finale deve ancora arrivare.
+        Hai completato tutte le missioni.{'\n'}
+        Il tuo regalo di compleanno è sbloccato.{'\n'}
+        Torna alla base. Preparati. Stanotte si festeggia.
       </motion.p>
 
       <motion.button
@@ -81,7 +81,7 @@ export default function DayCompleteScreen({ state, advance }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
       >
-        ✦ Ci vediamo stasera
+        🎁 Scopri il tuo premio
       </motion.button>
     </motion.div>
   )

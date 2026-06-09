@@ -56,5 +56,10 @@ export function useAdventureState() {
     })
   }, [])
 
-  return { state, advance, completeMission }
+  const reset = useCallback(() => {
+    localStorage.removeItem(KEY)
+    setState(DEFAULT)
+  }, [])
+
+  return { state, advance, completeMission, reset }
 }

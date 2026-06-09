@@ -1,52 +1,30 @@
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import MissionCard from '../components/MissionCard'
 import AdventureMap from '../components/AdventureMap'
+import TypewriterText from '../components/TypewriterText'
 
-async function compressImage(dataUrl) {
-  return new Promise(resolve => {
-    const img = new Image()
-    img.onload = () => {
-      const MAX = 800
-      const ratio = Math.min(1, MAX / Math.max(img.width, img.height))
-      const canvas = document.createElement('canvas')
-      canvas.width  = Math.round(img.width  * ratio)
-      canvas.height = Math.round(img.height * ratio)
-      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
-      resolve(canvas.toDataURL('image/jpeg', 0.72))
-    }
-    img.onerror = () => resolve(dataUrl) // fallback: use original
-    img.src = dataUrl
-  })
-}
+const RIDDLE = 'Hai nuotato. Hai riposato al sole. Il pomeriggio scende verso sera. La giornata non è ancora finita — c\'è ancora qualcosa che ti aspetta, qualcosa che si assapora lentamente. Come si chiama l\'ultimo pasto della giornata?'
+
+const VALID = new Set(['cena', 'cena a sorpresa', 'cenare', 'ristorante', 'sorpresa', 'regalo', 'cena!'])
 
 export default function Mission4Screen({ state, completeMission }) {
-  const [preview, setPreview] = useState(null)
-  const [confirmed, setConfirmed] = useState(false)
-  const [loading, setLoading] = useState(false)
-  const inputRef = useRef()
+  const [answer, setAnswer] = useState('')
+  const [shake, setShake] = useState(false)
+  const [showErr, setShowErr] = useState(false)
+  const [twDone, setTwDone] = useState(false)
+  const [success, setSuccess] = useState(false)
 
-  async function handleFileChange(e) {
-    const file = e.target.files[0]
-    if (!file) return
-    setLoading(true)
-    const reader = new FileReader()
-    reader.onload = async ev => {
-      const compressed = await compressImage(ev.target.result)
-      setPreview(compressed)
-      setLoading(false)
+  function handleSubmit(e) {
+    e.preventDefault()
+    if (VALID.has(answer.toLowerCase().trim())) {
+      setSuccess(true)
+      setTimeout(() => completeMission(4, 'travel-lerici'), 1800)
+    } else {
+      setShake(true)
+      setShowErr(true)
+      setTimeout(() => { setShake(false); setShowErr(false) }, 2200)
     }
-    reader.readAsDataURL(file)
-  }
-
-  function handleConfirm() {
-    setConfirmed(true)
-    setTimeout(() => completeMission(4, 'day-complete', { photo: preview }), 1800)
-  }
-
-  function handleRetry() {
-    setPreview(null)
-    inputRef.current.value = ''
   }
 
   const sv = {
@@ -60,75 +38,49 @@ export default function Mission4Screen({ state, completeMission }) {
       <div className="screen-inner">
         <AdventureMap completedMissions={state.completedMissions} />
 
-        <MissionCard eyebrow="Missione 04" title="Esploratore di Lerici">
-          <p style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.65 }}>
-            Siamo a Lerici. Guarda intorno a te — il castello, il porto, un vicolo, il mare.
-            Fotografa la cosa che ti piace di più. Qualsiasi cosa. Questa sarà la tua.
-          </p>
-
-          {/* Hidden file input */}
-          <input
-            ref={inputRef}
-            type="file"
-            accept="image/*"
-            capture="environment"
-            style={{ display: 'none' }}
-            onChange={handleFileChange}
-          />
+        <MissionCard eyebrow="Missione 04" title="L'ultimo segreto">
+          <div className="riddle">
+            <TypewriterText
+              text={RIDDLE}
+              speed={30}
+              onComplete={() => setTwDone(true)}
+            />
+          </div>
 
           <AnimatePresence mode="wait">
-            {confirmed ? (
+            {success ? (
               <motion.div
-                key="done"
+                key="success"
                 className="success-burst"
-                initial={{ opacity: 0, scale: 0.85 }}
+                initial={{ opacity: 0, scale: 0.8 }}
                 animate={{ opacity: 1, scale: 1 }}
               >
-                <span className="sb-icon">📸</span>
-                <div className="sb-title">Perfetto. È tua.</div>
-                <div className="sb-sub">Conserverai questo ricordo per sempre</div>
+                <span className="sb-icon">🌅</span>
+                <div className="sb-title">Hai capito.</div>
+                <div className="sb-sub">Il tuo regalo di compleanno ti aspetta stasera</div>
               </motion.div>
-            ) : preview ? (
-              <motion.div
-                key="confirm"
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                style={{ display: 'flex', flexDirection: 'column', gap: 14 }}
-              >
-                <div style={{ borderRadius: 12, overflow: 'hidden' }}>
-                  <img src={preview} alt="La tua foto" className="photo-preview-img" />
-                </div>
-                <p className="photo-confirm-q">
-                  È davvero questa la cosa<br />che ti è piaciuta di più?
-                </p>
-                <div className="photo-btns">
-                  <button className="btn btn-gold" onClick={handleConfirm}>
-                    ✓ Sì, è perfetta
-                  </button>
-                  <button className="btn btn-outline" onClick={handleRetry}>
-                    Riprovo
-                  </button>
-                </div>
-              </motion.div>
-            ) : (
-              <motion.div
-                key="upload"
-                initial={{ opacity: 0, y: 12 }}
+            ) : twDone ? (
+              <motion.form
+                key="form"
+                className="answer-form"
+                onSubmit={handleSubmit}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
               >
-                <button
-                  className="photo-trigger"
-                  onClick={() => inputRef.current.click()}
-                  disabled={loading}
-                >
-                  <span className="pt-icon">{loading ? '⏳' : '📷'}</span>
-                  <div className="pt-text">
-                    {loading ? 'Elaborazione...' : 'Scatta una foto'}
-                  </div>
-                  <div className="pt-sub">Tocca per aprire la fotocamera</div>
-                </button>
-              </motion.div>
-            )}
+                <input
+                  type="text"
+                  value={answer}
+                  onChange={e => setAnswer(e.target.value)}
+                  placeholder="La risposta è..."
+                  className={`answer-input${shake ? ' shake' : ''}`}
+                  autoComplete="off"
+                  autoCorrect="off"
+                  spellCheck="false"
+                />
+                {showErr && <div className="err-hint">Pensa all'ultimo pasto della giornata 🌙</div>}
+                <button type="submit" className="btn btn-gold">Conferma</button>
+              </motion.form>
+            ) : null}
           </AnimatePresence>
         </MissionCard>
       </div>

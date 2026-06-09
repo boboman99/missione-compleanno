@@ -19,7 +19,7 @@ export default function Mission3Screen({ state, completeMission }) {
     e.preventDefault()
     if (VALID.has(answer.toLowerCase().trim())) {
       setSuccess(true)
-      setTimeout(() => completeMission(3, 'mission4'), 1800)
+      setTimeout(() => completeMission(3, 'travel-fiascherino'), 1800)
     } else {
       setShake(true)
       setShowErr(true)
@@ -38,7 +38,7 @@ export default function Mission3Screen({ state, completeMission }) {
       <div className="screen-inner">
         <AdventureMap completedMissions={state.completedMissions} />
 
-        <MissionCard eyebrow="Missione 03" title="L'ora della pappa">
+        <MissionCard eyebrow="Missione 03" title="Cosa sta arrivando?">
           <div className="riddle">
             <TypewriterText
               text={RIDDLE}

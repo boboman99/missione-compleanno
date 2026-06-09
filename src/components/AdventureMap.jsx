@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 const W = 280
 const H = 390
@@ -23,20 +23,16 @@ const SEGMENTS = [
   'M 185,268 C 194,286 202,307 210,326',
 ]
 
-export default function AdventureMap({ completedMissions = [] }) {
+export default function AdventureMap({ completedMissions = [], scooterOverride = null }) {
   const n = completedMissions.length
-  const scooterPos = WAYPOINTS[Math.min(n, 4)]
-
-  // We track previous position to animate smoothly via CSS transition
-  const [pos, setPos] = useState({ x: WAYPOINTS[n].x, y: WAYPOINTS[n].y })
+  const basePos = { x: WAYPOINTS[Math.min(n, 4)].x, y: WAYPOINTS[Math.min(n, 4)].y }
+  const [pos, setPos] = useState(scooterOverride ?? basePos)
 
   useEffect(() => {
-    // small delay lets the CSS transition run visibly
-    const t = setTimeout(() => {
-      setPos({ x: WAYPOINTS[n].x, y: WAYPOINTS[n].y })
-    }, 80)
+    const target = scooterOverride ?? { x: WAYPOINTS[Math.min(n, 4)].x, y: WAYPOINTS[Math.min(n, 4)].y }
+    const t = setTimeout(() => setPos(target), 80)
     return () => clearTimeout(t)
-  }, [n])
+  }, [n, scooterOverride])
 
   return (
     <div className="map-wrap">
@@ -136,18 +132,20 @@ export default function AdventureMap({ completedMissions = [] }) {
               {reached && (
                 <circle cx={wp.x} cy={wp.y} r="3" fill="#fff" opacity="0.7" />
               )}
-              {/* City label */}
-              <text
-                x={wp.x}
-                y={wp.y - 12}
-                textAnchor="middle"
-                fontSize="8"
-                fontStyle="italic"
-                fontFamily="Georgia, serif"
-                fill={reached ? '#D4A853' : 'rgba(148,163,184,0.5)'}
-              >
-                {wp.name}
-              </text>
+              {/* City label — solo tappe raggiunte */}
+              {reached && (
+                <text
+                  x={wp.x}
+                  y={wp.y - 12}
+                  textAnchor="middle"
+                  fontSize="8"
+                  fontStyle="italic"
+                  fontFamily="Georgia, serif"
+                  fill="#D4A853"
+                >
+                  {wp.name}
+                </text>
+              )}
             </g>
           )
         })}

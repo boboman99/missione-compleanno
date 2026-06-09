@@ -81,12 +81,12 @@ export default function IntroScreen({ advance }) {
                   transition={{ duration: 0.5 }}
                   style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
                 >
-                  <p className="intro-question">Accetti la sfida?</p>
+                  <p className="intro-question">Completa tutte le missioni per sbloccare il tuo regalo di compleanno.</p>
                   <button
                     className="btn btn-gold"
                     onClick={() => advance('mission1')}
                   >
-                    ✦ Inizia l'avventura
+                    ✦ Accetta la sfida
                   </button>
                 </motion.div>
               )}

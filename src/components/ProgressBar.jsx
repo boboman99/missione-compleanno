@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
 
-const LABELS = ['', 'Missione 1 completata', 'Missione 2 completata', 'Missione 3 completata', 'Avventura completata!']
+const LABELS = ['', 'Missione 1 completata', 'Missione 2 completata', 'Missione 3 completata', 'Missione 4 completata', 'Avventura completata!']
 
 export default function ProgressBar({ completedCount }) {
-  const pct = (completedCount / 4) * 100
+  const pct = (completedCount / 5) * 100
 
   return (
     <div className="progress-bar">
@@ -14,7 +14,7 @@ export default function ProgressBar({ completedCount }) {
           animate={{ width: `${pct}%` }}
           transition={{ duration: 0.9, ease: [0.25, 0.46, 0.45, 0.94] }}
         />
-        {[25, 50, 75, 100].map((tick, i) => (
+        {[20, 40, 60, 80, 100].map((tick) => (
           <div
             key={tick}
             className={`pb-tick${pct >= tick ? ' on' : ''}`}

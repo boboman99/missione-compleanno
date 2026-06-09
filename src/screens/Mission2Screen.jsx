@@ -154,7 +154,7 @@ export default function Mission2Screen({ state, completeMission }) {
     if (v.correct) {
       setCorrectId(v.id)
       setSuccess(true)
-      setTimeout(() => completeMission(2, 'mission3'), 1800)
+      setTimeout(() => completeMission(2, 'travel-tellaro'), 1800)
     } else {
       setWrongIds(prev => new Set([...prev, v.id]))
       // Auto-reveal next clue when wrong answer
@@ -233,7 +233,7 @@ export default function Mission2Screen({ state, completeMission }) {
               >
                 <span className="sb-icon">🏘️</span>
                 <div className="sb-title">Trovato! Sei brava.</div>
-                <div className="sb-sub">Prossima tappa: Tellaro</div>
+                <div className="sb-sub">In viaggio verso Tellaro...</div>
               </motion.div>
             )}
           </AnimatePresence>
