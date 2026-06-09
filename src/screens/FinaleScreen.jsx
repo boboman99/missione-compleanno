@@ -2,13 +2,9 @@ import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import confetti from 'canvas-confetti'
 
-// ══════════════════════════════════════════════════════════
-//  IMPORTANTE: inserisci qui il vero ristorante prima del
-//  deploy. Cerca "CAMBIA QUI" in questo file.
-// ══════════════════════════════════════════════════════════
 const VENUE = {
-  name: '★ Da inserire ★',           // CAMBIA QUI — es: 'Ristorante Il Frantoio'
-  detail: 'La cena di compleanno',    // CAMBIA QUI — es: 'Via Roma 12, Lerici'
+  name: 'Una cenetta da sogno',
+  detail: 'Il tuo regalo di compleanno ♡',
 }
 
 const STARS = Array.from({ length: 40 }, (_, i) => ({

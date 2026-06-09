@@ -40,7 +40,7 @@ const SHOW_PROGRESS = new Set([
   'day-complete',
 ])
 
-const HIDE_MENU = new Set(['finale'])
+const HIDE_MENU = new Set([])
 
 export default function App() {
   const { state, advance, completeMission, reset } = useAdventureState()
