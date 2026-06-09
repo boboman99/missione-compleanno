@@ -131,7 +131,11 @@ export default function Mission4Screen({ state, completeMission }) {
     }
   }
 
-  const lericFound = [...revealed].filter(i => grid[i] === 'lerici').length
+  // Conta il massimo tra tutti i borghi rivelati (non solo Lerici)
+  const counts = {}
+  ;[...revealed].forEach(i => { counts[grid[i]] = (counts[grid[i]] || 0) + 1 })
+  const bestCount = Math.max(0, ...Object.values(counts))
+
   const sv = {
     initial: { opacity: 0, x: 40 },
     animate: { opacity: 1, x: 0 },
@@ -151,7 +155,7 @@ export default function Mission4Screen({ state, completeMission }) {
           {/* Contatore Lerici */}
           <div className="sc-counter">
             {Array.from({ length: WIN_COUNT }).map((_, i) => (
-              <span key={i} className={`sc-star${i < lericFound ? ' found' : ''}`}>★</span>
+              <span key={i} className={`sc-star${i < bestCount ? ' found' : ''}`}>★</span>
             ))}
             <span className="sc-counter-label">{lericFound}/{WIN_COUNT}</span>
           </div>
